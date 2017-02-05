@@ -1,0 +1,13 @@
+apply plugin: 'java' 
+apply plugin: 'application'
+
+dependencies {
+    compile files('lib/korat.jar')
+}
+
+mainClassName = "korat.Korat"
+
+run {
+    classpath 'DAG.DAG'
+    args += '--class DAG.DAG --args 2'
+}
