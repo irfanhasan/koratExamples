@@ -8,6 +8,6 @@ dependencies {
 mainClassName = "korat.Korat"
 
 run {
-    classpath 'DAG.DAG'
+    classpath 'lib/*'
     args += '--class DAG.DAG --args 2'
 }
