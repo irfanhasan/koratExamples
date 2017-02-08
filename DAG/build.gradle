@@ -13,6 +13,6 @@ run {
     jvmArgs = ["-noverify"]
 
     //    if (project.hasProperty("appArgs")) {
-    args Eval.me("['--class', 'DAG.DAG', '--args', '2']")
+    args Eval.me("['--class', 'DAG.DAG', '--args', '3']")
     //    }
 }
