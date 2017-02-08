@@ -9,5 +9,10 @@ mainClassName = "korat.Korat"
 
 run {
     classpath 'lib/*'
-    args += '--class DAG.DAG --args 2'
+
+    jvmArgs = ["-noverify"]
+
+    //    if (project.hasProperty("appArgs")) {
+    args Eval.me("['--class', 'DAG.DAG', '--args', '2']")
+    //    }
 }
