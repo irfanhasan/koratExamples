@@ -1,19 +1,33 @@
 package DAG;
+import static org.junit.Assert.*;
+
 import java.util.*;
+
+import org.junit.Test;
+
 import korat.finitization.*;
 import korat.finitization.impl.*;
 
 public class DAG {
 	public static class Node {
-		Node[] children;
+		Node[] children = new Node[0];
+		private ArrayList<Node> adjacent = new ArrayList<Node>();
 	}
 	
 	private Node root;
 	//private Node[] nodes;
 	private int size;
 	
+	public DAG(Node root) {
+		this.root = root;
+		size = 1;
+	}
 	
-	
+	void addChild(Node parent, Node child, boolean firstTime) {
+		if (firstTime) size++;
+		parent.adjacent.add(child);
+		parent.children = parent.adjacent.toArray(new Node[parent.adjacent.size()]);
+	}
 
 	
 	public boolean repOK() {
@@ -106,4 +120,7 @@ public class DAG {
         f.set("Node.children", childrenArray);
         return f;
     }
+	
+	
+
 }
