@@ -1,9 +1,9 @@
 package DAG;
-import static org.junit.Assert.*;
+
 
 import java.util.*;
 
-import org.junit.Test;
+
 
 import korat.finitization.*;
 import korat.finitization.impl.*;
@@ -15,18 +15,24 @@ public class DAG {
 	}
 	
 	private Node root;
-	//private Node[] nodes;
+	private ArrayList<Node> nodes = new ArrayList<Node>();
 	private int size;
 	
 	public DAG(Node root) {
 		this.root = root;
 		size = 1;
+		nodes.add(root);
 	}
 	
 	void addChild(Node parent, Node child, boolean firstTime) {
-		if (firstTime) size++;
-		parent.adjacent.add(child);
-		parent.children = parent.adjacent.toArray(new Node[parent.adjacent.size()]);
+		if (firstTime) { 
+			size++;
+			nodes.add(child);
+		}
+		if (parent != null) {
+			parent.adjacent.add(child);
+			parent.children = parent.adjacent.toArray(new Node[parent.adjacent.size()]);
+		}
 	}
 
 	
@@ -34,7 +40,8 @@ public class DAG {
 		//topological sort
 		if (root == null)
 			return size == 0;
-		Node[] nodes = getList();
+		//Node[] nodes = getList();
+		Node[] nodes = this.nodes.toArray(new Node[this.nodes.size()]);
 		HashMap<Node, Integer> incoming = new HashMap<Node, Integer>();
 		//detecting all incoming edges
 		for (int i = 0; i < nodes.length; i++) {
@@ -49,7 +56,7 @@ public class DAG {
 		
 		LinkedList<Node> noIncoming = new LinkedList<Node>();
 		LinkedList<Node> topSort = new LinkedList<Node>();
-		findNoIncoming(noIncoming, incoming);
+		findNoIncoming(noIncoming, incoming, nodes);
 		while(!noIncoming.isEmpty()) {
 			Node current = noIncoming.remove();
 			topSort.add(current);
@@ -98,7 +105,11 @@ public class DAG {
 		return true;
 	}
 	
-	private void findNoIncoming(LinkedList<Node> set, HashMap<Node, Integer> m) {
+	private void findNoIncoming(LinkedList<Node> set, HashMap<Node, Integer> m,
+			Node[] nodeList) {
+		for (int i = 0; i < nodeList.length; i++) {
+			if (!m.containsKey(nodeList[i])) set.add(nodeList[i]);
+		}
 		for (Node n : m.keySet()) {
 			if (m.get(n) == 0) set.add(n);
 		}

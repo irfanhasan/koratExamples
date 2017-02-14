@@ -22,6 +22,18 @@ public class DAGtest {
 		//just root
 		DAG g2 = new DAG(new Node());
 		assertEquals(true, g2.repOK());
+		
+		//disconnected graph
+		//4  
+		//5 -> 6	
+		Node n4 = new Node();
+		Node n5 = new Node();
+		Node n6 = new Node();
+		DAG g3 = new DAG(n4);
+		g3.addChild(null, n5, true);
+		g3.addChild(n5, n6, true);
+		assertEquals(true, g3.repOK());
+		
 	}
 	
 	@Test
@@ -40,7 +52,6 @@ public class DAGtest {
 		
 		//1 -> 2 -> 3 -> 4 ... 10
 		//1 -> 3
-		//2 -> 3
 		//1 -> 10
 		Node n1 = new Node();
 		Node n2 = new Node();
@@ -58,7 +69,30 @@ public class DAGtest {
 		g2.addChild(n1, parent, false);
 		assertEquals(true, g2.repOK());
 		
+		
+		//disconnected DAG
+		//1 -> 2 
+		//3 -> 4 -> ... 10
+		//3 -> 10
+		
+		n1 = new Node();
+		n2 = new Node();
+		n3 = new Node();
+		DAG g3 = new DAG(n1);
+		g3.addChild(n1, n2, true);
+		g3.addChild(null, n3, true);
+		parent = n3;
+		for (int i = 0; i < 7; i++) {
+			Node child = new Node();
+			g2.addChild(parent, child, true);
+			parent = child;
+		}
+		g2.addChild(n3, parent, false);
+		assertEquals(true, g2.repOK());
+		
 	}
+	
+	
 	
 	@Test
 	public void simpleCycle() {
@@ -81,6 +115,8 @@ public class DAGtest {
 		DAG g2 = new DAG(n3);
 		g2.addChild(n3, n3, false);
 		assertEquals(false, g2.repOK());
+		
+
 	}
 	
 	@Test
@@ -105,5 +141,28 @@ public class DAGtest {
 		}
 		g2.addChild(parent, n1, false);
 		assertEquals(false, g2.repOK());
+		
+		//disconnected graph with multiple paths leading to cycle
+		// 1-> 2 -> 3
+		//3 -> 1
+		//3 -> 2
+		//4 -> 5 -> 6...10
+		
+		n1 = new Node();
+		n2 = new Node();
+		n3 = new Node();
+		DAG g3 = new DAG(n1);
+		g3.addChild(n1, n2, true);
+		g3.addChild(n3, n1, true);
+		g3.addChild(n3, n2, false);
+		Node n4 = new Node();
+		g3.addChild(null, n4, true);
+		parent = n4;
+		for (int i = 0; i < 6; i++) {
+			Node child = new Node();			
+			g3.addChild(parent, child, true);
+			parent = child;
+		}
+		assertEquals(false, g3.repOK());
 	}
 }
