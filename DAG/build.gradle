@@ -1,8 +1,13 @@
 apply plugin: 'java' 
 apply plugin: 'application'
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
-    compile files('lib/korat.jar')
+    compile files('lib/korat.jar');
+    compile 'junit:junit:4.12'
 }
 
 mainClassName = "korat.Korat"
